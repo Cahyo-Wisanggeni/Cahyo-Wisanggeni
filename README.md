@@ -6,7 +6,12 @@
 
 <a href="https://github.com/Cahyo-Wisanggeni"><img src="./assets/badge-player.svg" height="28" alt="PLAYER: CAHYO-WISANGGENI" /></a>
 <a href="#"><img src="./assets/badge-class.svg" height="28" alt="CLASS: STATISTICS STUDENT" /></a>
-<a href="https://github.com/Cahyo-Wisanggeni?tab=repositories"><img src="./assets/badge-quest.svg" height="28" alt="QUEST: ML &amp; LOCAL AI" /></a>
+<br/>
+<a href="https://github.com/Cahyo-Wisanggeni?tab=repositories"><img src="./assets/badge-quest-ml.svg" height="28" alt="QUEST: ML &amp; AI ENGINEER" /></a>
+<a href="https://github.com/Cahyo-Wisanggeni?tab=repositories"><img src="./assets/badge-quest-ds.svg" height="28" alt="QUEST: DATA SCIENCE" /></a>
+<br/>
+<a href="https://github.com/Cahyo-Wisanggeni?tab=repositories"><img src="./assets/badge-quest-si.svg" height="28" alt="QUEST: STATISTICS INFERENCE" /></a>
+<a href="https://github.com/Cahyo-Wisanggeni?tab=repositories"><img src="./assets/badge-quest-de.svg" height="28" alt="QUEST: DATA ENGINEER" /></a>
 
 </div>
 
