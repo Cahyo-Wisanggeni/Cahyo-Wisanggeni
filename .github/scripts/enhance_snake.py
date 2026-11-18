@@ -153,11 +153,29 @@ def enhance_snake_svg(raw_svg: str) -> str:
     foot_r_x = W - 38 - text_width(foot_r_txt, 2, 1)
     foot_r = pixel_text_path(foot_r_txt, foot_r_x, 244, scale=2, gap=1)
 
+    # Subtle cyber grid & twinkling stars inside the arcade screen
+    bg_grid = "".join(
+        f'<line x1="{gx}" y1="52" x2="{gx}" y2="234" stroke="#4a1c7a" stroke-opacity="0.22" stroke-width="1"/>'
+        for gx in range(44, W - 20, 44)
+    ) + "".join(
+        f'<line x1="12" y1="{gy}" x2="{W - 12}" y2="{gy}" stroke="#4a1c7a" stroke-opacity="0.22" stroke-width="1"/>'
+        for gy in range(76, 234, 36)
+    )
+    bg_stars = "".join(
+        f'<rect x="{sx}" y="{sy}" width="4" height="4" fill="{sc}" shape-rendering="crispEdges">'
+        f'<animate attributeName="opacity" values="0.2;0.9;0.2" dur="2.6s" begin="{sd}" repeatCount="indefinite"/></rect>'
+        for sx, sy, sc, sd in [
+            (22, 60, "#00f5d4", "0.1s"), (852, 62, "#ff2a85", "0.7s"),
+            (22, 220, "#ffd166", "1.2s"), (852, 220, "#00f5d4", "0.4s"),
+        ]
+    )
+
     return f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="100%" role="img" aria-label="Neon Pixel Contribution Snake Arcade">
   <defs>
     <linearGradient id="cabBg" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#070812"/>
-      <stop offset="100%" stop-color="#110b24"/>
+      <stop offset="0%" stop-color="#060712"/>
+      <stop offset="55%" stop-color="#100924"/>
+      <stop offset="100%" stop-color="#190b33"/>
     </linearGradient>
     <linearGradient id="cabBorder" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0%" stop-color="#00f5d4"/>
@@ -182,8 +200,10 @@ def enhance_snake_svg(raw_svg: str) -> str:
   <path d="{title_path}" fill="#00f5d4" shape-rendering="crispEdges"/>
   <g shape-rendering="crispEdges">{"".join(legend_elems)}</g>
 
-  <!-- Inner Arcade Screen Frame -->
-  <rect x="12" y="52" width="{W - 24}" height="182" rx="6" fill="#080a16" stroke="#251d47" stroke-width="1.5"/>
+  <!-- Inner Arcade Screen Frame with Pixel Grid Background -->
+  <rect x="12" y="52" width="{W - 24}" height="182" rx="6" fill="#080a17" fill-opacity="0.92" stroke="#2d2057" stroke-width="1.5"/>
+  <g>{bg_grid}</g>
+  <g>{bg_stars}</g>
 
   <!-- Progress / Combo Meter Track aligned to Platane/snk .u bar (y=144 in nested viewBox) -->
   <rect x="29" y="213" width="822" height="16" rx="2" fill="#0d1024" stroke="#2d2057" stroke-width="1"/>
