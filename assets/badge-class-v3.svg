@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 28" role="img" aria-label="CLASS: STATISTICS STUDENT">
+  <rect width="94" height="28" fill="#140c29"/>
+  <rect x="94" width="206" height="28" fill="#ff2a85"/>
+  <g transform="translate(10,7) scale(0.583)"><path fill="#ff2a85" d="M6 2h12v4h4v12h-4v4H6v-4H2V6h4V2zm3 6v2H7v4h2v2h6v-2h2v-4h-2V8H9z"/></g>
+  <text x="60" y="17.8" fill="#ffffff" font-family="Verdana,Geneva,DejaVu Sans,sans-serif" font-size="10.5" font-weight="700" letter-spacing="1.4" text-anchor="middle">CLASS</text>
+  <text x="197" y="17.8" fill="#000000" font-family="Verdana,Geneva,DejaVu Sans,sans-serif" font-size="10.5" font-weight="900" letter-spacing="1.3" text-anchor="middle">STATISTICS STUDENT</text>
+</svg>
