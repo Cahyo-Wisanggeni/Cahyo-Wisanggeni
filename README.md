@@ -29,5 +29,5 @@
 <br/>
 
 <div align="center">
-  <img src="./assets/footer-arcade.svg" alt="Thanks for visiting my arcade — Keep building" width="100%" />
+  <img src="./assets/footer-arcade-v2.svg" alt="Stage Clear — Thanks for visiting" width="100%" />
 </div>
