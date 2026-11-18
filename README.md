@@ -16,7 +16,7 @@
 </div>
 
 <p align="center">
-  <img src="./assets/pixel-divider.svg" alt="Neon Pixel Divider" width="100%" />
+  <img src="./assets/pixel-divider-v2.svg" alt="Neon Pixel Divider" width="100%" />
 </p>
 
 <div align="center">
@@ -24,7 +24,7 @@
 </div>
 
 <p align="center">
-  <img src="./assets/pixel-divider.svg" alt="Neon Pixel Divider" width="100%" />
+  <img src="./assets/pixel-divider-v2.svg" alt="Neon Pixel Divider" width="100%" />
 </p>
 
 <div align="center">
