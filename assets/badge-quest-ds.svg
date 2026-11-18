@@ -1,7 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="228" height="28" viewBox="0 0 228 28" role="img" aria-label="QUEST: DATA SCIENCE">
-  <rect width="88" height="28" fill="#140c29"/>
-  <rect x="88" width="140" height="28" fill="#00f5d4"/>
-  <g transform="translate(10,7) scale(0.583)"><path fill="#00f5d4" d="M3 3h3v18H3V3zm7 6h3v12h-3V9zm7-4h3v16h-3V5z"/></g>
-  <text x="57" y="17.8" fill="#ffffff" font-family="Verdana,Geneva,DejaVu Sans,sans-serif" font-size="10.5" font-weight="700" letter-spacing="1.4" text-anchor="middle">QUEST</text>
-  <text x="158" y="17.8" fill="#000000" font-family="Verdana,Geneva,DejaVu Sans,sans-serif" font-size="10.5" font-weight="900" letter-spacing="1.3" text-anchor="middle">DATA SCIENCE</text>
-</svg>

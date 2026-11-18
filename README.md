@@ -4,14 +4,11 @@
 
 <br/>
 
-<a href="https://github.com/Cahyo-Wisanggeni"><img src="./assets/badge-player.svg" height="28" alt="PLAYER: CAHYO-WISANGGENI" /></a>
-<a href="#"><img src="./assets/badge-class.svg" height="28" alt="CLASS: STATISTICS STUDENT" /></a>
+<a href="https://github.com/Cahyo-Wisanggeni"><img src="./assets/badge-player-v2.svg" width="300" height="28" alt="PLAYER: CAHYO-WISANGGENI" /></a>&nbsp;&nbsp;<a href="#"><img src="./assets/badge-class-v2.svg" width="300" height="28" alt="CLASS: STATISTICS STUDENT" /></a>
 <br/>
-<a href="https://github.com/Cahyo-Wisanggeni?tab=repositories"><img src="./assets/badge-quest-ml.svg" height="28" alt="QUEST: ML &amp; AI ENGINEER" /></a>
-<a href="https://github.com/Cahyo-Wisanggeni?tab=repositories"><img src="./assets/badge-quest-ds.svg" height="28" alt="QUEST: DATA SCIENCE" /></a>
+<a href="https://github.com/Cahyo-Wisanggeni?tab=repositories"><img src="./assets/badge-quest-ml-v2.svg" width="300" height="28" alt="QUEST: ML &amp; AI ENGINEER" /></a>&nbsp;&nbsp;<a href="https://github.com/Cahyo-Wisanggeni?tab=repositories"><img src="./assets/badge-quest-ds-v2.svg" width="300" height="28" alt="QUEST: DATA SCIENCE" /></a>
 <br/>
-<a href="https://github.com/Cahyo-Wisanggeni?tab=repositories"><img src="./assets/badge-quest-si.svg" height="28" alt="QUEST: STATISTICS INFERENCE" /></a>
-<a href="https://github.com/Cahyo-Wisanggeni?tab=repositories"><img src="./assets/badge-quest-de.svg" height="28" alt="QUEST: DATA ENGINEER" /></a>
+<a href="https://github.com/Cahyo-Wisanggeni?tab=repositories"><img src="./assets/badge-quest-si-v2.svg" width="300" height="28" alt="QUEST: STATISTICS INFERENCE" /></a>&nbsp;&nbsp;<a href="https://github.com/Cahyo-Wisanggeni?tab=repositories"><img src="./assets/badge-quest-de-v2.svg" width="300" height="28" alt="QUEST: DATA ENGINEER" /></a>
 
 </div>
 
