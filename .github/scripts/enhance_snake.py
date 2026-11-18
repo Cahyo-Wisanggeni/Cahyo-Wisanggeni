@@ -132,88 +132,18 @@ def render_sprite(grid: list[str], palette: dict[str, str], x: int, y: int, px: 
 
 
 def build_night_city_bg(W: int) -> str:
-    """Render a cyberpunk 2-tone pixel-art night cityscape for the arcade screen backdrop."""
-    elems: list[str] = [
-        '<rect x="190" y="54" width="12" height="178" fill="#00f5d4" opacity="0.12"/>',
-        '<rect x="642" y="54" width="10" height="178" fill="#ff7eb6" opacity="0.12"/>',
-    ]
-    # Back-row distant silhouettes
-    back_bldgs = [
-        (16, 122, 46, 112), (66, 98, 38, 136), (108, 132, 50, 102), (164, 108, 42, 126),
-        (212, 138, 54, 96), (272, 104, 40, 130), (318, 126, 48, 108), (372, 98, 44, 136),
-        (422, 118, 52, 116), (480, 102, 40, 132), (526, 130, 48, 104), (580, 106, 44, 128),
-        (630, 134, 52, 100), (688, 98, 42, 136), (736, 122, 46, 112), (788, 104, 44, 130),
-        (836, 132, 30, 102),
-    ]
-    for bx, by, bw, bh in back_bldgs:
-        elems.append(f'<rect x="{bx}" y="{by}" width="{bw}" height="{bh}" fill="#131036" opacity="0.88"/>')
-
-    # Foreground 2-tone cyberpunk towers with neon trims, stripes, emblems & hologram pyramids
-    front_bldgs = [
-        (20, 146, 46, 88, "#ff2a85", "#ffd166", False, None, False, False),
-        (74, 118, 48, 116, "#00f5d4", "#ff2a85", True, None, False, True),
-        (134, 148, 44, 86, "#9d4edd", "#00f5d4", False, None, True, False),
-        (190, 124, 52, 110, "#00f5d4", "#ff2a85", False, "cyan_ring", False, False),
-        (254, 142, 46, 92, "#ff2a85", "#ffd166", True, None, False, False),
-        (312, 114, 48, 120, "#00f5d4", "#ffd166", False, None, False, True),
-        (372, 136, 54, 98, "#9d4edd", "#ff7eb6", False, "pink_box", False, False),
-        (438, 110, 50, 124, "#00f5d4", "#ff2a85", False, "cyan_ring", False, True),
-        (500, 142, 50, 92, "#ff2a85", "#00f5d4", False, None, True, False),
-        (562, 120, 48, 114, "#00f5d4", "#ffd166", True, None, False, False),
-        (622, 144, 52, 90, "#9d4edd", "#00f5d4", False, None, False, False),
-        (686, 114, 46, 120, "#ff2a85", "#00f5d4", False, "pink_box", False, True),
-        (744, 138, 48, 96, "#00f5d4", "#ffd166", False, None, True, False),
-        (802, 122, 54, 112, "#ff2a85", "#ffd166", False, None, False, True),
-    ]
-    for idx, (bx, by, bw, bh, edge_col, win_col, striped, emblem, pyramid, spire) in enumerate(front_bldgs):
-        side_w = max(8, bw // 4)
-        elems.append(f'<rect x="{bx}" y="{by}" width="{bw}" height="{bh}" fill="#120c2e"/>')
-        elems.append(f'<rect x="{bx}" y="{by}" width="{side_w}" height="{bh}" fill="#08071a"/>')
-        if striped:
-            for sy in range(by + 6, 212, 8):
-                for sx in range(bx + side_w + 3, bx + bw - 4, 6):
-                    if ((sx + sy) // 6) % 2 == 0:
-                        elems.append(f'<rect x="{sx}" y="{sy}" width="4" height="4" fill="{edge_col}" opacity="0.45"/>')
-        else:
-            for wy in range(by + 10, 212, 9):
-                for wx in range(bx + side_w + 4, bx + bw - 7, 8):
-                    if ((wx * 3 + wy * 5 + idx) % 5) in (0, 2):
-                        col = win_col if (wx + wy) % 3 != 0 else "#ffd166"
-                        elems.append(f'<rect x="{wx}" y="{wy}" width="5" height="3" fill="{col}" opacity="0.62"/>')
-        elems.append(f'<rect x="{bx}" y="{by}" width="{bw}" height="2" fill="{edge_col}" opacity="0.75"/>')
-        elems.append(f'<rect x="{bx + side_w}" y="{by}" width="2" height="{bh}" fill="{edge_col}" opacity="0.65"/>')
-        if spire:
-            sx = bx + side_w + (bw - side_w) // 2
-            elems.append(f'<rect x="{sx}" y="{by - 12}" width="2" height="12" fill="#6b21a8"/>')
-            elems.append(f'<rect x="{sx - 1}" y="{by - 14}" width="4" height="3" fill="#ff2a85" opacity="0.85"/>')
-        if emblem == "cyan_ring":
-            ex = bx + side_w + (bw - side_w - 12) // 2
-            ey = by + 8
-            elems.append(f'<path d="M{ex+2},{ey}h8v2h-8zM{ex},{ey+2}h2v8h-2zM{ex+10},{ey+2}h2v8h-2zM{ex+2},{ey+10}h8v2h-8zM{ex+4},{ey+5}h4v2h-4z" fill="#00f5d4" opacity="0.78"/>')
-        elif emblem == "pink_box":
-            ex = bx + side_w + (bw - side_w - 12) // 2
-            ey = by + 8
-            elems.append(f'<path d="M{ex},{ey}h12v2h-12zM{ex},{ey+2}h2v8h-2zM{ex+10},{ey+2}h2v8h-2zM{ex},{ey+10}h12v2h-12zM{ex+4},{ey+4}h4v4h-4z" fill="#ff2a85" opacity="0.78"/>')
-        if pyramid:
-            px_mid = bx + bw // 2
-            for row_i, (pw_i, col) in enumerate([(4, "#fff07c"), (10, "#ffd166"), (16, "#ff7eb6"), (22, "#ff2a85")]):
-                elems.append(f'<rect x="{px_mid - pw_i // 2}" y="{by - 18 + row_i * 4}" width="{pw_i}" height="3" fill="{col}" opacity="0.72"/>')
-
-    # Night sky twinkling stars + pixel crescent moon
+    """Render a clean dark starry arcade screen backdrop (no buildings)."""
     stars = [
         (48, 64, "#00f5d4", "0.2s"), (152, 74, "#ffd166", "0.8s"), (264, 62, "#ff7eb6", "1.4s"),
         (392, 68, "#00f5d4", "0.5s"), (518, 60, "#ffd166", "1.1s"), (646, 72, "#9d4edd", "0.3s"),
-        (742, 64, "#ff7eb6", "0.9s"),
+        (742, 64, "#ff7eb6", "0.9s"), (834, 70, "#00f5d4", "1.2s"),
     ]
-    for sx, sy, sc, sd in stars:
-        elems.append(
-            f'<rect x="{sx}" y="{sy}" width="3" height="3" fill="{sc}" opacity="0.8">'
-            f'<animate attributeName="opacity" values="0.25;0.95;0.25" dur="2.6s" begin="{sd}" repeatCount="indefinite"/>'
-            f'</rect>'
-        )
-    elems.append('<rect x="814" y="64" width="16" height="16" fill="#ffd166" opacity="0.82"/>')
-    elems.append('<rect x="820" y="64" width="12" height="12" fill="#080a1c"/>')
-    return "".join(elems)
+    return "".join(
+        f'<rect x="{sx}" y="{sy}" width="3" height="3" fill="{sc}" opacity="0.7">'
+        f'<animate attributeName="opacity" values="0.2;0.9;0.2" dur="2.6s" begin="{sd}" repeatCount="indefinite"/>'
+        f'</rect>'
+        for sx, sy, sc, sd in stars
+    )
 
 
 def enhance_snake_svg(raw_svg: str) -> str:
@@ -230,8 +160,8 @@ def enhance_snake_svg(raw_svg: str) -> str:
 
     override_css = (
         "<style>"
-        ":root{--ce:#0c0e21;--cb:#302154;--c0:#0c0e21;--c1:#4a0e4e;--c2:#9d4edd;--c3:#ff7eb6;--c4:#ffd166}"
-        ".c{shape-rendering:crispEdges !important;stroke-width:1px;stroke:var(--cb);fill-opacity:0.58}"
+        ":root{--ce:#0e1024;--cb:#2a1f4a;--c0:#0e1024;--c1:#4a0e4e;--c2:#9d4edd;--c3:#ff7eb6;--c4:#ffd166}"
+        ".c{shape-rendering:crispEdges !important;stroke-width:1px;stroke:var(--cb);fill-opacity:0.86}"
         ".c.c1,.c.c2,.c.c3,.c.c4{stroke:#ffffff30;fill-opacity:1}"
         ".u{shape-rendering:crispEdges !important}"
         ".s{shape-rendering:crispEdges !important}"
