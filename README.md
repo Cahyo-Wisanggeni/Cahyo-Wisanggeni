@@ -15,7 +15,7 @@
 </p>
 
 <div align="center">
-  <img src="./assets/player-hud-v2.svg" alt="Player Card" width="100%" />
+  <img src="./assets/player-hud-v3.svg" alt="Player Card" width="100%" />
 </div>
 
 <p align="center">
