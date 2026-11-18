@@ -28,7 +28,7 @@
 </p>
 
 <div align="center">
-  <img src="https://raw.githubusercontent.com/Cahyo-Wisanggeni/Cahyo-Wisanggeni/output/github-contributors-snake-v2.svg" alt="Contributors Neon Pixel Snake" width="100%" />
+  <img src="https://raw.githubusercontent.com/Cahyo-Wisanggeni/Cahyo-Wisanggeni/output/github-contributors-snake-v3.svg" alt="Contributors Neon Pixel Snake" width="100%" />
 </div>
 
 <br/>

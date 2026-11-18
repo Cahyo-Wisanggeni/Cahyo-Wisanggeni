@@ -173,7 +173,7 @@ def enhance_snake_svg(raw_svg: str) -> str:
     )
     inner = inner.replace("</style>", "</style>" + override_css, 1)
 
-    W, H = 880, 272
+    W, H = 880, 246
     title_path = pixel_text_path("CONTRIBUTORS", 54, 21, scale=2, gap=1)
     mini_snake = render_sprite(
         MINI_SNAKE_ICON,
@@ -198,12 +198,6 @@ def enhance_snake_svg(raw_svg: str) -> str:
         f'<animate attributeName="opacity" values="1;0.45;1" dur="1.6s" repeatCount="indefinite"/>'
         f"</path>"
     )
-
-    foot_l = pixel_text_path("GRID: 52W X 7D", 22, 244, scale=2, gap=1)
-    foot_c = pixel_text_path("SAKURA-SERPENT MK.II", 256, 244, scale=2, gap=1)
-    foot_r_txt = "STATUS: HUNTING COMMITS"
-    foot_r_x = W - 38 - text_width(foot_r_txt, 2, 1)
-    foot_r = pixel_text_path(foot_r_txt, foot_r_x, 244, scale=2, gap=1)
 
     bg_grid = "".join(
         f'<line x1="{gx}" y1="52" x2="{gx}" y2="234" stroke="#4a1c7a" stroke-opacity="0.22" stroke-width="1"/>'
@@ -272,17 +266,6 @@ def enhance_snake_svg(raw_svg: str) -> str:
   <svg x="16" y="46" width="848" height="185" viewBox="{view_box}">
     {inner}
   </svg>
-
-  <!-- Bottom Arcade Status Bar -->
-  <rect x="12" y="238" width="{W - 24}" height="24" rx="4" fill="#0d0f22" stroke="#3c1668" stroke-width="1.5"/>
-  <g shape-rendering="crispEdges">
-    <path d="{foot_l}" fill="#ff7eb6"/>
-    <path d="{foot_c}" fill="#ffd166"/>
-    <path d="{foot_r}" fill="#00f5d4"/>
-    <rect x="{W - 30}" y="245" width="10" height="10" fill="#ff2a85">
-      <animate attributeName="opacity" values="1;0.2;1" dur="1.1s" repeatCount="indefinite"/>
-    </rect>
-  </g>
 
   <!-- Subtle CRT Scanlines & Corner Rivets -->
   <rect x="4" y="4" width="{W - 8}" height="{H - 8}" rx="8" fill="url(#crtLines)" pointer-events="none"/>
