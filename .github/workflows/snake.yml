@@ -1,4 +1,4 @@
-name: Build Unified Japanese Sunset Profile
+name: Generate Neon Contribution Snake
 
 on:
   schedule:
@@ -20,21 +20,21 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Generate live contribution snake SVG
+      - name: Generate neon snake SVG
         uses: Platane/snk@v3
         with:
           github_user_name: ${{ github.repository_owner }}
           outputs: |
-            dist/raw-snake.svg?palette=github-dark&color_snake=#ff2a85&color_dots=#161b22,#3b0764,#7e22ce,#00f5d4,#ffd166
+            dist/github-contribution-grid-snake-neon.svg?palette=github-dark&color_snake=#ff2a85&color_dots=#161b22,#3b0764,#7e22ce,#00f5d4,#ffd166
 
-      - name: Build unified Japanese Neon Sunset profile SVG and publish
+      - name: Enhance snake into Neon Pixel Arcade Cabinet and publish
         run: |
           TMPDIR=$(mktemp -d)
-          python3 .github/scripts/build_profile_canvas.py dist/raw-snake.svg "$TMPDIR/github-profile-tokyo.svg"
+          python3 .github/scripts/enhance_snake.py dist/github-contribution-grid-snake-neon.svg "$TMPDIR/github-contribution-grid-snake-neon.svg"
           cd "$TMPDIR"
           git init -b output
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add github-profile-tokyo.svg
-          git commit -m "chore: update unified Neo-Tokyo sunset profile SVG"
+          git add github-contribution-grid-snake-neon.svg
+          git commit -m "chore: update neon contribution snake"
           git push -f "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" output
