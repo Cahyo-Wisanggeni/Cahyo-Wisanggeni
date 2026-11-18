@@ -244,7 +244,7 @@ def enhance_snake_svg(raw_svg: str) -> str:
     inner = inner.replace("</style>", "</style>" + override_css, 1)
 
     W, H = 880, 272
-    title_path = pixel_text_path("SNAKE.EXE // TOKYO ARCADE", 54, 21, scale=2, gap=1)
+    title_path = pixel_text_path("CONTRIBUTORS", 54, 21, scale=2, gap=1)
     mini_snake = render_sprite(
         MINI_SNAKE_ICON,
         {"C": "#00f5d4", "W": "#ffffff", "P": "#ff2a85", "V": "#ff7eb6", "G": "#ffd166"},
