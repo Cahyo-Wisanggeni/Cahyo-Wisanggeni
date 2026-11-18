@@ -26,11 +26,12 @@ jobs:
 
       - name: Publish SVG to output branch
         run: |
-          cd dist
-          git init
+          TMPDIR=$(mktemp -d)
+          cp dist/github-contribution-grid-snake-neon.svg "$TMPDIR/"
+          cd "$TMPDIR"
+          git init -b output
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git checkout -b output
           git add github-contribution-grid-snake-neon.svg
           git commit -m "chore: update neon contribution snake"
           git push -f "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" output
