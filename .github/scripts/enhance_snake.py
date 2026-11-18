@@ -145,9 +145,9 @@ def enhance_snake_svg(raw_svg: str) -> str:
 
     override_css = (
         "<style>"
-        ":root{--ce:#101326;--cb:#291d4a;--c0:#101326;--c1:#4a0e4e;--c2:#9d4edd;--c3:#ff7eb6;--c4:#ffd166}"
-        ".c{shape-rendering:crispEdges !important;stroke-width:1px;stroke:var(--cb);fill-opacity:0.86}"
-        ".c.c1,.c.c2,.c.c3,.c.c4{stroke:#ffffff26;fill-opacity:1}"
+        ":root{--ce:#0e1024;--cb:#3a215e;--c0:#0e1024;--c1:#4a0e4e;--c2:#9d4edd;--c3:#ff7eb6;--c4:#ffd166}"
+        ".c{shape-rendering:crispEdges !important;stroke-width:1px;stroke:var(--cb);fill-opacity:0.64}"
+        ".c.c1,.c.c2,.c.c3,.c.c4{stroke:#ffffff30;fill-opacity:1}"
         ".u{shape-rendering:crispEdges !important}"
         ".s{shape-rendering:crispEdges !important}"
         ".s.s0{fill:#00f5d4 !important;filter:url(#snakeGlow)}"
@@ -191,7 +191,7 @@ def enhance_snake_svg(raw_svg: str) -> str:
     )
 
     foot_l = pixel_text_path("GRID: 52W X 7D", 22, 244, scale=2, gap=1)
-    foot_c = pixel_text_path("SAKURA-SERPENT MK.II", 320, 244, scale=2, gap=1)
+    foot_c = pixel_text_path("SAKURA-SERPENT MK.II", 256, 244, scale=2, gap=1)
     foot_r_txt = "STATUS: HUNTING COMMITS"
     foot_r_x = W - 38 - text_width(foot_r_txt, 2, 1)
     foot_r = pixel_text_path(foot_r_txt, foot_r_x, 244, scale=2, gap=1)
@@ -218,9 +218,17 @@ def enhance_snake_svg(raw_svg: str) -> str:
     return f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="100%" role="img" aria-label="Japanese Neon Pixel Contribution Snake Arcade">
   <defs>
     <linearGradient id="cabBg" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#060712"/>
-      <stop offset="55%" stop-color="#130826"/>
-      <stop offset="100%" stop-color="#1e0a33"/>
+      <stop offset="0%" stop-color="#0b0724"/>
+      <stop offset="45%" stop-color="#350c54"/>
+      <stop offset="80%" stop-color="#9e1f5c"/>
+      <stop offset="100%" stop-color="#ff6b4a"/>
+    </linearGradient>
+    <linearGradient id="screenSunset" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0d0726"/>
+      <stop offset="38%" stop-color="#420e54"/>
+      <stop offset="72%" stop-color="#b82460"/>
+      <stop offset="92%" stop-color="#ff7e47"/>
+      <stop offset="100%" stop-color="#ffb347"/>
     </linearGradient>
     <linearGradient id="cabBorder" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0%" stop-color="#ff2a85"/>
@@ -228,7 +236,8 @@ def enhance_snake_svg(raw_svg: str) -> str:
       <stop offset="100%" stop-color="#00f5d4"/>
     </linearGradient>
     <linearGradient id="cabSun" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#ffd166"/>
+      <stop offset="0%" stop-color="#fff07c"/>
+      <stop offset="50%" stop-color="#ff8c42"/>
       <stop offset="100%" stop-color="#ff2a85"/>
     </linearGradient>
     <filter id="snakeGlow" x="-40%" y="-40%" width="180%" height="180%">
@@ -249,10 +258,16 @@ def enhance_snake_svg(raw_svg: str) -> str:
   <path d="{title_path}" fill="#00f5d4" shape-rendering="crispEdges"/>
   <g shape-rendering="crispEdges">{"".join(legend_elems)}</g>
 
-  <!-- Inner Arcade Screen Frame with Mt. Fuji & Sakura Background -->
-  <rect x="12" y="52" width="{W - 24}" height="182" rx="6" fill="#080a17" fill-opacity="0.94" stroke="#3c1668" stroke-width="1.5"/>
-  <circle cx="440" cy="128" r="56" fill="url(#cabSun)" opacity="0.16"/>
-  <g opacity="0.28">{fuji_bg}</g>
+  <!-- Inner Arcade Screen Frame with Sunset Sky + Mt. Fuji + Sakura Background -->
+  <rect x="12" y="52" width="{W - 24}" height="182" rx="6" fill="url(#screenSunset)" stroke="#3c1668" stroke-width="1.5"/>
+  <g shape-rendering="crispEdges" opacity="0.55">
+    <rect x="70" y="76" width="84" height="6" fill="#ff9e6d"/>
+    <rect x="86" y="70" width="48" height="6" fill="#ffd166"/>
+    <rect x="690" y="82" width="92" height="6" fill="#ff9e6d"/>
+    <rect x="708" y="76" width="54" height="6" fill="#ffd166"/>
+  </g>
+  <circle cx="440" cy="132" r="58" fill="url(#cabSun)" opacity="0.52"/>
+  <g opacity="0.62">{fuji_bg}</g>
   <g>{bg_grid}</g>
   {bg_petals}
 

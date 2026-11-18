@@ -1,8 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 102" width="100%" role="img" aria-label="Japanese Neon Pixel Footer">
   <defs>
     <linearGradient id="footBg" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#060712"/>
-      <stop offset="100%" stop-color="#1e0a33"/>
+      <stop offset="0%" stop-color="#0b0724"/>
+      <stop offset="50%" stop-color="#420e54"/>
+      <stop offset="85%" stop-color="#a8225c"/>
+      <stop offset="100%" stop-color="#ff704d"/>
     </linearGradient>
     <linearGradient id="footBorder" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0%" stop-color="#ff2a85"/>
