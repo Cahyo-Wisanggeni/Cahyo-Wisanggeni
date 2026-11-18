@@ -4,9 +4,9 @@
 
 <br/>
 
-[![GitHub](https://img.shields.io/badge/PLAYER-CAHYO--WISANGGENI-090a14?style=for-the-badge&logo=github&logoColor=00f5d4&labelColor=140c29&color=00f5d4)](https://github.com/Cahyo-Wisanggeni)
-[![Role](https://img.shields.io/badge/CLASS-STATISTICS_STUDENT-090a14?style=for-the-badge&logo=arcade&logoColor=ff2a85&labelColor=140c29&color=ff2a85)](#)
-[![Quest](https://img.shields.io/badge/QUEST-ML_%26_LOCAL_AI-090a14?style=for-the-badge&logo=python&logoColor=ffd166&labelColor=140c29&color=ffd166)](https://github.com/Cahyo-Wisanggeni?tab=repositories)
+<a href="https://github.com/Cahyo-Wisanggeni"><img src="./assets/badge-player.svg" height="28" alt="PLAYER: CAHYO-WISANGGENI" /></a>
+<a href="#"><img src="./assets/badge-class.svg" height="28" alt="CLASS: STATISTICS STUDENT" /></a>
+<a href="https://github.com/Cahyo-Wisanggeni?tab=repositories"><img src="./assets/badge-quest.svg" height="28" alt="QUEST: ML &amp; LOCAL AI" /></a>
 
 </div>
 
