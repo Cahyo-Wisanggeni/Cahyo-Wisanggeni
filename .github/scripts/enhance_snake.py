@@ -1,4 +1,4 @@
-"""Post-process Platane/snk SVG into a Neon Pixel Arcade Cabinet."""
+"""Post-process Platane/snk SVG into a Japanese Neon Pixel Arcade Cabinet."""
 
 import re
 import sys
@@ -19,7 +19,7 @@ FONT_5X7 = {
     "M": ["10001", "11011", "10101", "10101", "10001", "10001", "10001"],
     "N": ["10001", "11001", "10101", "10011", "10001", "10001", "10001"],
     "O": ["01110", "10001", "10001", "10001", "10001", "10001", "01110"],
-    "P": ["11110", "10001", "10001", "11110", "10000", "10000", "10000"],
+    "P": ["11110", "10001", "10001", "11110", "10000", "10000", "00000"],
     "R": ["11110", "10001", "10001", "11110", "10100", "10010", "10001"],
     "S": ["01111", "10000", "10000", "01110", "00001", "00001", "11110"],
     "T": ["11111", "00100", "00100", "00100", "00100", "00100", "00100"],
@@ -40,6 +40,11 @@ FONT_5X7 = {
     "-": ["00000", "00000", "00000", "11111", "00000", "00000", "00000"],
 }
 
+JP_7X7 = {
+    "東": ["0001000", "1111111", "0111110", "0101010", "0111110", "0011100", "1101011"],
+    "京": ["0001000", "1111111", "0111110", "0100010", "0111110", "0001000", "1011001"],
+}
+
 MINI_SNAKE_ICON = [
     "..CCCC..",
     ".CCWCCC.",
@@ -49,6 +54,21 @@ MINI_SNAKE_ICON = [
     "..VVV...",
     ".GGG....",
     "..GG....",
+]
+
+FUJI_BG = [
+    "...........WWWWWW...........",
+    "..........WWWWWWWW..........",
+    ".........WWWWWWWWWW.........",
+    "........WWWCWWWWCWWW........",
+    ".......VVWVVVWWVVVWVV.......",
+    "......VVVVVVVVVVVVVVVV......",
+    ".....VVVVVVVVVVVVVVVVVV.....",
+    "....VVVVVVVVVVVVVVVVVVVV....",
+    "...VVVVVVVVVVVVVVVVVVVVVV...",
+    "..VVVVVVVVVVVVVVVVVVVVVVVV..",
+    ".VVVVVVVVVVVVVVVVVVVVVVVVVV.",
+    "VVVVVVVVVVVVVVVVVVVVVVVVVVVV",
 ]
 
 
@@ -77,16 +97,31 @@ def pixel_text_path(text: str, x: int, y: int, scale: int = 2, gap: int = 1) -> 
     return "".join(cmds)
 
 
-def render_mini_snake(x: int, y: int, px: int = 3) -> str:
-    palette = {
-        "C": "#00f5d4",
-        "W": "#ffffff",
-        "P": "#ff2a85",
-        "V": "#9d4edd",
-        "G": "#ffd166",
-    }
+def jp_text_path(text: str, x: int, y: int, scale: int = 2, gap: int = 2) -> str:
+    cmds = []
+    cx = x
+    step = (7 + gap) * scale
+    for ch in text:
+        glyph = JP_7X7.get(ch)
+        if glyph:
+            for r, row in enumerate(glyph):
+                c = 0
+                while c < 7:
+                    if row[c] == "1":
+                        start = c
+                        while c < 7 and row[c] == "1":
+                            c += 1
+                        w = (c - start) * scale
+                        cmds.append(f"M{cx + start * scale},{y + r * scale}h{w}v{scale}h-{w}z")
+                    else:
+                        c += 1
+        cx += step
+    return "".join(cmds)
+
+
+def render_sprite(grid: list[str], palette: dict[str, str], x: int, y: int, px: int = 3) -> str:
     by_col: dict[str, list[str]] = {}
-    for r, row in enumerate(MINI_SNAKE_ICON):
+    for r, row in enumerate(grid):
         for c, ch in enumerate(row):
             if ch in palette:
                 by_col.setdefault(palette[ch], []).append(f"M{x + c * px},{y + r * px}h{px}v{px}h-{px}z")
@@ -97,7 +132,6 @@ def render_mini_snake(x: int, y: int, px: int = 3) -> str:
 
 
 def enhance_snake_svg(raw_svg: str) -> str:
-    # Extract viewBox and inner body from Platane/snk output
     vb_match = re.search(r'viewBox="([^"]+)"', raw_svg)
     view_box = vb_match.group(1) if vb_match else "-16 -32 880 192"
 
@@ -106,54 +140,62 @@ def enhance_snake_svg(raw_svg: str) -> str:
         raise ValueError("Invalid SVG input: missing <svg> wrapper")
     inner = inner_match.group(1)
 
-    # Remove <desc> and crisp up rounded corners on rects
     inner = re.sub(r"<desc>.*?</desc>", "", inner, flags=re.DOTALL)
     inner = re.sub(r'\s+r[xy]="[0-9.]+"', "", inner)
 
-    # Inject crisp pixel & multi-color neon snake overrides right after </style>
     override_css = (
         "<style>"
-        ":root{--ce:#101326;--cb:#251d47;--c0:#101326;--c1:#3b0764;--c2:#7e22ce;--c3:#00f5d4;--c4:#ffd166}"
-        ".c{shape-rendering:crispEdges !important;stroke-width:1px;stroke:var(--cb)}"
-        ".c.c1,.c.c2,.c.c3,.c.c4{stroke:#ffffff22}"
+        ":root{--ce:#101326;--cb:#291d4a;--c0:#101326;--c1:#4a0e4e;--c2:#9d4edd;--c3:#ff7eb6;--c4:#ffd166}"
+        ".c{shape-rendering:crispEdges !important;stroke-width:1px;stroke:var(--cb);fill-opacity:0.86}"
+        ".c.c1,.c.c2,.c.c3,.c.c4{stroke:#ffffff26;fill-opacity:1}"
         ".u{shape-rendering:crispEdges !important}"
         ".s{shape-rendering:crispEdges !important}"
         ".s.s0{fill:#00f5d4 !important;filter:url(#snakeGlow)}"
         ".s.s1{fill:#ff2a85 !important;filter:url(#snakeGlow)}"
-        ".s.s2{fill:#9d4edd !important}"
+        ".s.s2{fill:#ff7eb6 !important}"
         ".s.s3{fill:#ffd166 !important}"
         "</style>"
     )
     inner = inner.replace("</style>", "</style>" + override_css, 1)
 
     W, H = 880, 272
-    title_path = pixel_text_path("SNAKE.EXE // CONTRIBUTION ARCADE", 54, 21, scale=2, gap=1)
-    mini_snake = render_mini_snake(20, 16, px=3)
+    title_path = pixel_text_path("SNAKE.EXE // TOKYO ARCADE", 54, 21, scale=2, gap=1)
+    mini_snake = render_sprite(
+        MINI_SNAKE_ICON,
+        {"C": "#00f5d4", "W": "#ffffff", "P": "#ff2a85", "V": "#ff7eb6", "G": "#ffd166"},
+        20,
+        16,
+        px=3,
+    )
+    fuji_bg = render_sprite(
+        FUJI_BG,
+        {"W": "#ffe5f1", "C": "#00f5d4", "V": "#261247"},
+        300,
+        104,
+        px=10,
+    )
 
-    # Top-right legend + blinking 1UP
-    legend_colors = ["#101326", "#3b0764", "#7e22ce", "#00f5d4", "#ffd166"]
-    legend_elems = [f'<path d="{pixel_text_path("LESS", 590, 21, 2, 1)}" fill="#94a3b8"/>']
-    lx = 644
+    legend_colors = ["#101326", "#4a0e4e", "#9d4edd", "#ff7eb6", "#ffd166"]
+    legend_elems = [f'<path d="{pixel_text_path("LESS", 576, 21, 2, 1)}" fill="#94a3b8"/>']
+    lx = 630
     for col in legend_colors:
-        legend_elems.append(f'<rect x="{lx}" y="22" width="12" height="12" fill="{col}" stroke="#2d2057" stroke-width="1"/>')
+        legend_elems.append(f'<rect x="{lx}" y="22" width="12" height="12" fill="{col}" stroke="#3c1668" stroke-width="1"/>')
         lx += 16
     legend_elems.append(f'<path d="{pixel_text_path("MORE", lx + 4, 21, 2, 1)}" fill="#94a3b8"/>')
     one_up_x = lx + 4 + text_width("MORE", 2, 1) + 18
     legend_elems.append(
         f'<rect x="{one_up_x}" y="17" width="48" height="22" rx="3" fill="#170f2e" stroke="#ff2a85" stroke-width="1.5"/>'
-        f'<path d="{pixel_text_path("1UP", one_up_x + 7, 21, 2, 1)}" fill="#ffd166">'
-        f'<animate attributeName="opacity" values="1;0.35;1" dur="1.4s" repeatCount="indefinite"/>'
+        f'<path d="{jp_text_path("東京", one_up_x + 7, 21, scale=2, gap=2)}" fill="#ffd166">'
+        f'<animate attributeName="opacity" values="1;0.45;1" dur="1.6s" repeatCount="indefinite"/>'
         f"</path>"
     )
 
-    # Bottom status bar text
     foot_l = pixel_text_path("GRID: 52W X 7D", 22, 244, scale=2, gap=1)
-    foot_c = pixel_text_path("CYBER-SERPENT MK.II", 336, 244, scale=2, gap=1)
+    foot_c = pixel_text_path("SAKURA-SERPENT MK.II", 320, 244, scale=2, gap=1)
     foot_r_txt = "STATUS: HUNTING COMMITS"
     foot_r_x = W - 38 - text_width(foot_r_txt, 2, 1)
     foot_r = pixel_text_path(foot_r_txt, foot_r_x, 244, scale=2, gap=1)
 
-    # Subtle cyber grid & twinkling stars inside the arcade screen
     bg_grid = "".join(
         f'<line x1="{gx}" y1="52" x2="{gx}" y2="234" stroke="#4a1c7a" stroke-opacity="0.22" stroke-width="1"/>'
         for gx in range(44, W - 20, 44)
@@ -161,25 +203,32 @@ def enhance_snake_svg(raw_svg: str) -> str:
         f'<line x1="12" y1="{gy}" x2="{W - 12}" y2="{gy}" stroke="#4a1c7a" stroke-opacity="0.22" stroke-width="1"/>'
         for gy in range(76, 234, 36)
     )
-    bg_stars = "".join(
-        f'<rect x="{sx}" y="{sy}" width="4" height="4" fill="{sc}" shape-rendering="crispEdges">'
-        f'<animate attributeName="opacity" values="0.2;0.9;0.2" dur="2.6s" begin="{sd}" repeatCount="indefinite"/></rect>'
-        for sx, sy, sc, sd in [
-            (22, 60, "#00f5d4", "0.1s"), (852, 62, "#ff2a85", "0.7s"),
-            (22, 220, "#ffd166", "1.2s"), (852, 220, "#00f5d4", "0.4s"),
+    bg_petals = "".join(
+        f'<g shape-rendering="crispEdges">'
+        f'<rect x="{sx}" y="{sy}" width="4" height="4" fill="{sc}" opacity="0.85">'
+        f'<animateTransform attributeName="transform" type="translate" values="0,0;18,55;36,110" dur="{dur}" repeatCount="indefinite"/>'
+        f'<animate attributeName="opacity" values="0;0.9;0.9;0" dur="{dur}" repeatCount="indefinite"/>'
+        f'</rect></g>'
+        for sx, sy, sc, dur in [
+            (22, 60, "#ff7eb6", "4.8s"), (210, 56, "#ff2a85", "5.6s"),
+            (660, 58, "#ff7eb6", "5.1s"), (830, 62, "#ffd166", "4.5s"),
         ]
     )
 
-    return f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="100%" role="img" aria-label="Neon Pixel Contribution Snake Arcade">
+    return f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="100%" role="img" aria-label="Japanese Neon Pixel Contribution Snake Arcade">
   <defs>
     <linearGradient id="cabBg" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0%" stop-color="#060712"/>
-      <stop offset="55%" stop-color="#100924"/>
-      <stop offset="100%" stop-color="#190b33"/>
+      <stop offset="55%" stop-color="#130826"/>
+      <stop offset="100%" stop-color="#1e0a33"/>
     </linearGradient>
     <linearGradient id="cabBorder" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0%" stop-color="#00f5d4"/>
-      <stop offset="50%" stop-color="#9d4edd"/>
+      <stop offset="0%" stop-color="#ff2a85"/>
+      <stop offset="50%" stop-color="#ffd166"/>
+      <stop offset="100%" stop-color="#00f5d4"/>
+    </linearGradient>
+    <linearGradient id="cabSun" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffd166"/>
       <stop offset="100%" stop-color="#ff2a85"/>
     </linearGradient>
     <filter id="snakeGlow" x="-40%" y="-40%" width="180%" height="180%">
@@ -195,18 +244,20 @@ def enhance_snake_svg(raw_svg: str) -> str:
   <rect x="2" y="2" width="{W - 4}" height="{H - 4}" rx="10" fill="url(#cabBg)" stroke="url(#cabBorder)" stroke-width="2.5"/>
 
   <!-- Top Arcade Header -->
-  <rect x="12" y="12" width="{W - 24}" height="34" rx="4" fill="#0d0f22" stroke="#2d2057" stroke-width="1.5"/>
+  <rect x="12" y="12" width="{W - 24}" height="34" rx="4" fill="#0d0f22" stroke="#3c1668" stroke-width="1.5"/>
   {mini_snake}
   <path d="{title_path}" fill="#00f5d4" shape-rendering="crispEdges"/>
   <g shape-rendering="crispEdges">{"".join(legend_elems)}</g>
 
-  <!-- Inner Arcade Screen Frame with Pixel Grid Background -->
-  <rect x="12" y="52" width="{W - 24}" height="182" rx="6" fill="#080a17" fill-opacity="0.92" stroke="#2d2057" stroke-width="1.5"/>
+  <!-- Inner Arcade Screen Frame with Mt. Fuji & Sakura Background -->
+  <rect x="12" y="52" width="{W - 24}" height="182" rx="6" fill="#080a17" fill-opacity="0.94" stroke="#3c1668" stroke-width="1.5"/>
+  <circle cx="440" cy="128" r="56" fill="url(#cabSun)" opacity="0.16"/>
+  <g opacity="0.28">{fuji_bg}</g>
   <g>{bg_grid}</g>
-  <g>{bg_stars}</g>
+  {bg_petals}
 
-  <!-- Progress / Combo Meter Track aligned to Platane/snk .u bar (y=144 in nested viewBox) -->
-  <rect x="29" y="213" width="822" height="16" rx="2" fill="#0d1024" stroke="#2d2057" stroke-width="1"/>
+  <!-- Progress / Combo Meter Track -->
+  <rect x="29" y="213" width="822" height="16" rx="2" fill="#0d1024" stroke="#3c1668" stroke-width="1"/>
 
   <!-- Nested Live Contribution Snake -->
   <svg x="16" y="46" width="848" height="185" viewBox="{view_box}">
@@ -214,9 +265,9 @@ def enhance_snake_svg(raw_svg: str) -> str:
   </svg>
 
   <!-- Bottom Arcade Status Bar -->
-  <rect x="12" y="238" width="{W - 24}" height="24" rx="4" fill="#0d0f22" stroke="#2d2057" stroke-width="1.5"/>
+  <rect x="12" y="238" width="{W - 24}" height="24" rx="4" fill="#0d0f22" stroke="#3c1668" stroke-width="1.5"/>
   <g shape-rendering="crispEdges">
-    <path d="{foot_l}" fill="#9d4edd"/>
+    <path d="{foot_l}" fill="#ff7eb6"/>
     <path d="{foot_c}" fill="#ffd166"/>
     <path d="{foot_r}" fill="#00f5d4"/>
     <rect x="{W - 30}" y="245" width="10" height="10" fill="#ff2a85">
@@ -227,10 +278,10 @@ def enhance_snake_svg(raw_svg: str) -> str:
   <!-- Subtle CRT Scanlines & Corner Rivets -->
   <rect x="4" y="4" width="{W - 8}" height="{H - 8}" rx="8" fill="url(#crtLines)" pointer-events="none"/>
   <g shape-rendering="crispEdges">
-    <rect x="8" y="8" width="4" height="4" fill="#00f5d4"/>
-    <rect x="{W - 12}" y="8" width="4" height="4" fill="#ff2a85"/>
-    <rect x="8" y="{H - 12}" width="4" height="4" fill="#ff2a85"/>
-    <rect x="{W - 12}" y="{H - 12}" width="4" height="4" fill="#00f5d4"/>
+    <rect x="8" y="8" width="4" height="4" fill="#ff2a85"/>
+    <rect x="{W - 12}" y="8" width="4" height="4" fill="#00f5d4"/>
+    <rect x="8" y="{H - 12}" width="4" height="4" fill="#00f5d4"/>
+    <rect x="{W - 12}" y="{H - 12}" width="4" height="4" fill="#ff2a85"/>
   </g>
 </svg>'''
 
