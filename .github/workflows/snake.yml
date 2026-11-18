@@ -30,11 +30,11 @@ jobs:
       - name: Build unified Japanese Neon Sunset profile SVG and publish
         run: |
           TMPDIR=$(mktemp -d)
-          python3 .github/scripts/build_profile_canvas.py dist/raw-snake.svg "$TMPDIR/github-profile-sunset.svg"
+          python3 .github/scripts/build_profile_canvas.py dist/raw-snake.svg "$TMPDIR/github-profile-tokyo.svg"
           cd "$TMPDIR"
           git init -b output
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add github-profile-sunset.svg
-          git commit -m "chore: update unified Japanese sunset profile SVG"
+          git add github-profile-tokyo.svg
+          git commit -m "chore: update unified Neo-Tokyo sunset profile SVG"
           git push -f "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" output

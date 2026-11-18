@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://raw.githubusercontent.com/Cahyo-Wisanggeni/Cahyo-Wisanggeni/output/github-profile-sunset.svg" alt="Cahyo Wisanggeni — Japanese Neon Sunset Pixel Profile" width="100%" />
+<img src="https://raw.githubusercontent.com/Cahyo-Wisanggeni/Cahyo-Wisanggeni/output/github-profile-tokyo.svg" alt="Cahyo Wisanggeni — Neo-Tokyo Neon Sunset Pixel Profile" width="100%" />
 
 <br/>
 
