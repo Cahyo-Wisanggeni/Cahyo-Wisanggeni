@@ -23,7 +23,7 @@
 </p>
 
 <div align="center">
-  <img src="https://raw.githubusercontent.com/Cahyo-Wisanggeni/Cahyo-Wisanggeni/output/github-contribution-grid-snake-neon.svg" alt="Neon Pixel Contribution Snake" width="100%" />
+  <img src="https://raw.githubusercontent.com/Cahyo-Wisanggeni/Cahyo-Wisanggeni/output/github-contribution-grid-snake-city.svg" alt="Neon Pixel Contribution Snake" width="100%" />
 </div>
 
 <br/>

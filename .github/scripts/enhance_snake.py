@@ -131,6 +131,59 @@ def render_sprite(grid: list[str], palette: dict[str, str], x: int, y: int, px: 
     )
 
 
+def build_night_city_bg(W: int) -> str:
+    """Render a layered pixel-art night cityscape for the arcade screen backdrop."""
+    # Back-row silhouettes
+    back_bldgs = [
+        (16, 128, 46, 106), (66, 104, 38, 130), (108, 138, 50, 96), (164, 114, 42, 120),
+        (212, 144, 54, 90), (272, 108, 40, 126), (318, 132, 48, 102), (372, 102, 44, 132),
+        (422, 124, 52, 110), (480, 106, 40, 128), (526, 136, 48, 98), (580, 112, 44, 122),
+        (630, 140, 52, 94), (688, 104, 42, 130), (736, 128, 46, 106), (788, 110, 44, 124),
+        (836, 138, 30, 96),
+    ]
+    elems = []
+    for bx, by, bw, bh in back_bldgs:
+        elems.append(f'<rect x="{bx}" y="{by}" width="{bw}" height="{bh}" fill="#121333" opacity="0.88"/>')
+
+    # Foreground skyscrapers with spires & glowing pixel windows
+    front_bldgs = [
+        (20, 148, 42, 86, False), (74, 122, 48, 112, True), (132, 152, 44, 82, False),
+        (188, 130, 52, 104, False), (252, 146, 46, 88, False), (310, 118, 44, 116, True),
+        (366, 142, 54, 92, False), (434, 114, 48, 120, True), (496, 146, 50, 88, False),
+        (558, 124, 46, 110, False), (616, 148, 52, 86, False), (680, 118, 44, 116, True),
+        (736, 142, 48, 92, False), (796, 126, 56, 108, True),
+    ]
+    win_colors = ["#ffd166", "#00f5d4", "#ff2a85", "#9d4edd"]
+    for idx, (bx, by, bw, bh, spire) in enumerate(front_bldgs):
+        elems.append(f'<rect x="{bx}" y="{by}" width="{bw}" height="{bh}" fill="#0a0c21" stroke="#2d2057" stroke-width="1"/>')
+        if spire:
+            sx = bx + bw // 2 - 1
+            elems.append(f'<rect x="{sx}" y="{by - 14}" width="2" height="14" fill="#4a2b7a"/>')
+            elems.append(f'<rect x="{sx - 1}" y="{by - 16}" width="4" height="3" fill="#ff2a85" opacity="0.9"/>')
+        for wy in range(by + 8, 210, 11):
+            for wx in range(bx + 6, bx + bw - 8, 10):
+                if ((wx * 3 + wy * 5 + idx) % 5) in (0, 2):
+                    col = win_colors[(wx + wy + idx) % len(win_colors)]
+                    elems.append(f'<rect x="{wx}" y="{wy}" width="4" height="4" fill="{col}" opacity="0.58"/>')
+
+    # Night sky twinkling stars + pixel crescent moon
+    stars = [
+        (48, 64, "#00f5d4", "0.2s"), (152, 74, "#ffd166", "0.8s"), (264, 62, "#ff7eb6", "1.4s"),
+        (392, 68, "#00f5d4", "0.5s"), (518, 60, "#ffd166", "1.1s"), (646, 72, "#9d4edd", "0.3s"),
+        (742, 64, "#ff7eb6", "0.9s"),
+    ]
+    for sx, sy, sc, sd in stars:
+        elems.append(
+            f'<rect x="{sx}" y="{sy}" width="3" height="3" fill="{sc}" opacity="0.8">'
+            f'<animate attributeName="opacity" values="0.25;0.95;0.25" dur="2.6s" begin="{sd}" repeatCount="indefinite"/>'
+            f'</rect>'
+        )
+    # Crisp pixel moon at top-right
+    elems.append('<rect x="814" y="64" width="16" height="16" fill="#ffd166" opacity="0.82"/>')
+    elems.append('<rect x="820" y="64" width="12" height="12" fill="#080a1c"/>')
+    return "".join(elems)
+
+
 def enhance_snake_svg(raw_svg: str) -> str:
     vb_match = re.search(r'viewBox="([^"]+)"', raw_svg)
     view_box = vb_match.group(1) if vb_match else "-16 -32 880 192"
@@ -145,8 +198,8 @@ def enhance_snake_svg(raw_svg: str) -> str:
 
     override_css = (
         "<style>"
-        ":root{--ce:#0e1024;--cb:#3a215e;--c0:#0e1024;--c1:#4a0e4e;--c2:#9d4edd;--c3:#ff7eb6;--c4:#ffd166}"
-        ".c{shape-rendering:crispEdges !important;stroke-width:1px;stroke:var(--cb);fill-opacity:0.64}"
+        ":root{--ce:#0c0e21;--cb:#302154;--c0:#0c0e21;--c1:#4a0e4e;--c2:#9d4edd;--c3:#ff7eb6;--c4:#ffd166}"
+        ".c{shape-rendering:crispEdges !important;stroke-width:1px;stroke:var(--cb);fill-opacity:0.58}"
         ".c.c1,.c.c2,.c.c3,.c.c4{stroke:#ffffff30;fill-opacity:1}"
         ".u{shape-rendering:crispEdges !important}"
         ".s{shape-rendering:crispEdges !important}"
@@ -167,13 +220,7 @@ def enhance_snake_svg(raw_svg: str) -> str:
         16,
         px=3,
     )
-    fuji_bg = render_sprite(
-        FUJI_BG,
-        {"W": "#ffe5f1", "C": "#00f5d4", "V": "#261247"},
-        300,
-        104,
-        px=10,
-    )
+    night_city_bg = build_night_city_bg(W)
 
     legend_colors = ["#101326", "#4a0e4e", "#9d4edd", "#ff7eb6", "#ffd166"]
     legend_elems = [f'<path d="{pixel_text_path("LESS", 576, 21, 2, 1)}" fill="#94a3b8"/>']
@@ -218,27 +265,19 @@ def enhance_snake_svg(raw_svg: str) -> str:
     return f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="100%" role="img" aria-label="Japanese Neon Pixel Contribution Snake Arcade">
   <defs>
     <linearGradient id="cabBg" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#0b0724"/>
-      <stop offset="45%" stop-color="#350c54"/>
-      <stop offset="80%" stop-color="#9e1f5c"/>
-      <stop offset="100%" stop-color="#ff6b4a"/>
+      <stop offset="0%" stop-color="#060714"/>
+      <stop offset="55%" stop-color="#0d0f28"/>
+      <stop offset="100%" stop-color="#171136"/>
     </linearGradient>
-    <linearGradient id="screenSunset" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#0d0726"/>
-      <stop offset="38%" stop-color="#420e54"/>
-      <stop offset="72%" stop-color="#b82460"/>
-      <stop offset="92%" stop-color="#ff7e47"/>
-      <stop offset="100%" stop-color="#ffb347"/>
+    <linearGradient id="screenNight" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#050612"/>
+      <stop offset="60%" stop-color="#0b0d24"/>
+      <stop offset="100%" stop-color="#171238"/>
     </linearGradient>
     <linearGradient id="cabBorder" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0%" stop-color="#ff2a85"/>
       <stop offset="50%" stop-color="#ffd166"/>
       <stop offset="100%" stop-color="#00f5d4"/>
-    </linearGradient>
-    <linearGradient id="cabSun" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#fff07c"/>
-      <stop offset="50%" stop-color="#ff8c42"/>
-      <stop offset="100%" stop-color="#ff2a85"/>
     </linearGradient>
     <filter id="snakeGlow" x="-40%" y="-40%" width="180%" height="180%">
       <feGaussianBlur stdDeviation="2.5" result="blur"/>
@@ -258,16 +297,9 @@ def enhance_snake_svg(raw_svg: str) -> str:
   <path d="{title_path}" fill="#00f5d4" shape-rendering="crispEdges"/>
   <g shape-rendering="crispEdges">{"".join(legend_elems)}</g>
 
-  <!-- Inner Arcade Screen Frame with Sunset Sky + Mt. Fuji + Sakura Background -->
-  <rect x="12" y="52" width="{W - 24}" height="182" rx="6" fill="url(#screenSunset)" stroke="#3c1668" stroke-width="1.5"/>
-  <g shape-rendering="crispEdges" opacity="0.55">
-    <rect x="70" y="76" width="84" height="6" fill="#ff9e6d"/>
-    <rect x="86" y="70" width="48" height="6" fill="#ffd166"/>
-    <rect x="690" y="82" width="92" height="6" fill="#ff9e6d"/>
-    <rect x="708" y="76" width="54" height="6" fill="#ffd166"/>
-  </g>
-  <circle cx="440" cy="132" r="58" fill="url(#cabSun)" opacity="0.52"/>
-  <g opacity="0.62">{fuji_bg}</g>
+  <!-- Inner Arcade Screen Frame with Night Cityscape Background -->
+  <rect x="12" y="52" width="{W - 24}" height="182" rx="6" fill="url(#screenNight)" stroke="#3c1668" stroke-width="1.5"/>
+  <g shape-rendering="crispEdges">{night_city_bg}</g>
   <g>{bg_grid}</g>
   {bg_petals}
 
